@@ -2,15 +2,23 @@ var app = angular.module('twitterClone');
 
 app.service('parseService', function($http, $q){
   //Here you'll need to create two methods. One called postData and the other called getData.
-
+ 
 
   //On the line below create the postData method. This method will add data to the parse backend.
   //The url for the request needs to be 'https://api.parse.com' + '/1/classes/chat'
   //Also, remember that $http returns a promise. So if you return the whole $http call (return $http(...)), you can then use .then in your controller.
   
   //postData method here
-
-
+  this.postData = function(message){
+   var url = 'https://api.parse.com' + '/1/classes/chat';
+   return $http({
+     method: 'post',
+     data: {text: message},
+     url: url
+   }).then(function(httpResult){
+     return httpResult.data;
+   })
+ };
   //On the line below create a getData method. This method will retrieve data from the parse backend.
   //The url for the get request should be 'https://api.parse.com/1/classes/chat?order=-createdAt'
   //Make sure that in your post request, the format of the data you sent to parse is an object with a key of text and a value of whatever the message was. IE {text: message}
@@ -26,4 +34,18 @@ app.service('parseService', function($http, $q){
   */
 
   //getData method here
+
+  this.getData = function(){
+    // var deferred = $q.deferred();
+
+   return $http({
+      'method': 'get',
+      'url' : 'https://api.parse.com/1/classes/chat?order=-createdAt'
+    }).then(function(res){
+      return res.data.results
+    })
+  }
+
+
+
 });
